@@ -1,0 +1,87 @@
+class Cell {
+	int x, y;
+	boolean[] wall = new boolean[4];
+	boolean visited = false;
+
+	Cell(int i, int j) {
+		x = i;
+		y = j;
+    wall[0] = true;
+    wall[1] = true;
+    wall[2] = true;
+    wall[3] = true;
+	}
+
+  void showWalls(int i, int j) {
+    if(wall[0])
+      line(i     , j     , i+size, j  );
+    if(wall[1])
+      line(i+size, j     , i+size, j+size);
+    if(wall[2])
+      line(i+size, j+size, i     , j+size);
+    if(wall[3])
+      line(i     , j+size, i     , j  );
+  }
+
+	void show(int r, int g, int b, int a) {
+		stroke(255);
+		//noFill();
+		//strokeWeight(5);
+    	int i = y * size;
+    	int j = x * size;
+      showWalls(i, j);
+		if(visited) {
+      noStroke();
+      stroke(255);
+      showWalls(i, j);
+      //noFill();
+			fill(r, g, b, a);
+			rect(i, j, size, size);
+		}
+	}
+
+	int index(int i, int j) {
+		return ((i)*rows) + (j);
+	}
+
+	Cell checkNeighbors() {
+		ArrayList<Cell> neighbor = new ArrayList<Cell>();
+		//Cell[] neighbor = {null, null, null, null};
+		Cell top = null, right = null, bottom = null, left = null;
+		// boolean added = false;
+		if(y > 0) { //TOP
+			top = grid[index(x  , y-1)];
+			if(top != null && !top.visited) {
+				// added = true;
+				neighbor.add(top);
+			}				
+		}
+		if(x < cols-1) { //RIGHT
+			right = grid[index(x+1, y  )];
+			if(right != null && !right.visited) {
+				// added = true;
+				neighbor.add(bottom);
+			}
+		}
+		if(y < rows-1) { //BOTTOM
+			bottom = grid[index(x  , y+1)];
+			if(bottom != null && !bottom.visited) {
+				// added = true;
+				neighbor.add(bottom);
+			}
+		}
+		if(x > 0) { //LEFT
+			// neighbor[3] = grid[index(x-1, y  )];
+			left = grid[index(x-1, y  )];
+			if(left != null && !left.visited) {
+				neighbor.add(left);
+			}
+		}
+		if(neighbor.size() > 0) {
+			int r = floor(random(0,neighbor.size()));
+			return neighbor.get(r);
+		} else {
+			return null;
+		}
+	}
+}
